@@ -33,4 +33,12 @@ public class GameController {
 
         return new ResponseEntity<>(gameInfoDto, HttpStatus.OK);
     }
+
+    @PutMapping
+    public ResponseEntity<GameInfoDto> deleteAll(@RequestBody GameInfoDto gameInfoDto) {
+
+        return new ResponseEntity<>(this.gameService.deleteAll(gameInfoDto), HttpStatus.OK);
+    }
+
+
 }

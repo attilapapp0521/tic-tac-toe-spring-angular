@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {GameInfoModel} from "../../_models/game-info.model";
 import {GameService} from "../../_services/game.service";
 
@@ -7,7 +7,7 @@ import {GameService} from "../../_services/game.service";
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.css']
 })
-export class PlaygroundComponent implements OnInit, OnDestroy{
+export class PlaygroundComponent implements OnInit{
   gameForm: GameInfoModel;
 
   constructor(private gameService: GameService) { }
@@ -15,9 +15,7 @@ export class PlaygroundComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
 
   }
-  ngOnDestroy() {
 
-  }
 
   newGame(){
     this.gameService.getNewGame().subscribe(

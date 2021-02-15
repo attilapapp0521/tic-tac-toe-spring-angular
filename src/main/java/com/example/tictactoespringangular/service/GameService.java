@@ -1,6 +1,8 @@
 package com.example.tictactoespringangular.service;
 
+import com.example.tictactoespringangular.domain.Game;
 import com.example.tictactoespringangular.dto.GameInfoDto;
+import com.example.tictactoespringangular.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.List;
 public class GameService {
     private final GameInfoDto gameInfoDto;
     private static final int SUM_FIELD = 9;
+    private final GameRepository gameRepository;
 
     @Autowired
-    public GameService() {
+    public GameService(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
         this.gameInfoDto = new GameInfoDto();
     }
 
@@ -30,6 +34,14 @@ public class GameService {
         this.gameInfoDto.setPlayerOne(true);
         this.gameInfoDto.setCondition(0);
 
+        List<Game> gameList = this.gameRepository.findAll();
+
+        if(gameList.isEmpty()){
+            gameInfoDto.setWonP1(0);
+            gameInfoDto.setWonP2(0);
+            gameInfoDto.setDraw(0);
+        }
+
         return gameInfoDto;
     }
 
@@ -43,9 +55,11 @@ public class GameService {
         if (!request.getBoard().contains("") && gameInfoDto.getCondition() != 1 &&
                 request.getCoordinate() != 2) {
             gameInfoDto.setCondition(3);
+            save(gameInfoDto.getCondition(), gameInfoDto.getGameId());
             return gameInfoDto;
         }
 
+        save(gameInfoDto.getCondition(),gameInfoDto.getGameId());
         return gameInfoDto;
     }
 
@@ -102,5 +116,46 @@ public class GameService {
 
     private boolean nextPlayer(boolean isFirstPlayer) {
         return !isFirstPlayer;
+    }
+
+    public GameInfoDto save(int condition, Long id) {
+        Game game = getGameById(id);
+
+        if(game == null){
+            game = new Game();
+        }
+
+        if (condition == 1) {
+            game.setWonP1();
+            gameRepository.save(game);
+            gameInfoDto.setGameId(game.getId());
+            gameInfoDto.setWonP1(game.getWonP1());
+        } else if (condition == 2) {
+            game.setWonP2();
+            gameRepository.save(game);
+            gameInfoDto.setGameId(game.getId());
+            gameInfoDto.setWonP2(game.getWonP2());
+        } else if (condition == 3) {
+            game.setDraw();
+            gameRepository.save(game);
+            gameInfoDto.setGameId(game.getId());
+            gameInfoDto.setDraw(game.getDraw());
+        }
+
+        return  gameInfoDto;
+    }
+
+    public GameInfoDto deleteAll(GameInfoDto gameInfoDto) {
+        this.gameRepository.deleteAll();
+
+        gameInfoDto.setWonP1(0);
+        gameInfoDto.setWonP2(0);
+        gameInfoDto.setDraw(0);
+
+        return gameInfoDto;
+    }
+
+    private Game getGameById(Long id){
+        return gameRepository.getGameById(id);
     }
 }
