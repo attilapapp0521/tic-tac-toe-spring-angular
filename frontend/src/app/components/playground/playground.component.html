@@ -10,4 +10,32 @@
              [item]="field" (click)="move(i)">
 
   </app-field>
-</div>ł
+  <div class="statistics" *ngIf="isGame() || isWin() || draw()" (click)="reset()">
+    <table>
+      <tr>
+        <td>P1 won</td>
+      </tr>
+      <tr>
+        <td>{{gameForm?.wonP1 || 0}}</td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>Draw</td>
+      </tr>
+      <tr>
+        <td>{{gameForm?.draw || 0}}</td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>P2 won</td>
+      </tr>
+      <tr>
+        <td>{{gameForm?.wonP2 || 0}}</td>
+      </tr>
+    </table>
+
+
+  </div>
+</div>

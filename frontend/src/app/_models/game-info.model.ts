@@ -3,4 +3,8 @@ export interface GameInfoModel {
   playerOne: boolean;
   coordinate: number;
   condition: number;
+  wonP1: number;
+  wonP2: number;
+  draw: number;
+  gameId: number;
 }

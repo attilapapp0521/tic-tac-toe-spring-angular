@@ -33,14 +33,7 @@ public class GameService {
         this.gameInfoDto.setBoard(newBoard);
         this.gameInfoDto.setPlayerOne(true);
         this.gameInfoDto.setCondition(0);
-
-        List<Game> gameList = this.gameRepository.findAll();
-
-        if(gameList.isEmpty()){
-            gameInfoDto.setWonP1(0);
-            gameInfoDto.setWonP2(0);
-            gameInfoDto.setDraw(0);
-        }
+        reset();
 
         return gameInfoDto;
     }
@@ -51,6 +44,7 @@ public class GameService {
                 request.getBoard(), request.isPlayerOne()));
         gameInfoDto.setCondition(checkWinCondition(request.getBoard()));
         gameInfoDto.setPlayerOne(nextPlayer(request.isPlayerOne()));
+        reset();
 
         if (!request.getBoard().contains("") && gameInfoDto.getCondition() != 1 &&
                 request.getCoordinate() != 2) {
@@ -145,6 +139,18 @@ public class GameService {
         return  gameInfoDto;
     }
 
+    private GameInfoDto reset(){
+        List<Game> playersList = this.gameRepository.findAll();
+
+        if(playersList.isEmpty()){
+            gameInfoDto.setWonP1(0);
+            gameInfoDto.setWonP2(0);
+            gameInfoDto.setDraw(0);
+        }
+
+        return gameInfoDto;
+    }
+
     public GameInfoDto deleteAll(GameInfoDto gameInfoDto) {
         this.gameRepository.deleteAll();
 
@@ -154,6 +160,7 @@ public class GameService {
 
         return gameInfoDto;
     }
+
 
     private Game getGameById(Long id){
         return gameRepository.getGameById(id);

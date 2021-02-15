@@ -10,3 +10,12 @@ app-field{
   height: 150px;
   max-width: 30px;
 }
+table{
+  border: black solid 2px;
+
+}
+
+.statistics{
+  cursor: pointer;
+}
+

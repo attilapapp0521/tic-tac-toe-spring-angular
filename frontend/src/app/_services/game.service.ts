@@ -19,4 +19,8 @@ export class GameService {
   postMove(gameForm: GameInfoModel) {
     return this.http.post<GameInfoModel>(this.baseUrl, gameForm);
   }
+
+  updateByEmptyStatistics(gameInfoModel: GameInfoModel) {
+    return this.http.put<GameInfoModel>(this.baseUrl, gameInfoModel);
+  }
 }
