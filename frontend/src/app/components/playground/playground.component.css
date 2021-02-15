@@ -1,0 +1,12 @@
+div{
+  display: grid;
+  grid-template-columns: 150px 150px 150px;
+  grid-column-end: revert;
+
+}
+
+app-field{
+  border: 1px;
+  height: 150px;
+  max-width: 30px;
+}

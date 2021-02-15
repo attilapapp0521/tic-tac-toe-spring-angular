@@ -1,0 +1,13 @@
+<h1>Tic Tac Toe</h1>
+
+<h2 *ngIf="isGame()">Next Player: {{player()}}</h2>
+<h2 *ngIf="isWin()" style="color: green">Player {{gameForm.condition}} win!</h2>
+<h2 *ngIf="draw()" style="color: blue">Draw!</h2>
+
+<button (click)="newGame()">New game</button>
+<div>
+  <app-field *ngFor="let field of gameForm?.board; let i = index"
+             [item]="field" (click)="move(i)">
+
+  </app-field>
+</div>ł

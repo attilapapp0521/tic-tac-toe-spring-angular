@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/game")
+@CrossOrigin(origins = "http://localhost:4200")
 public class GameController {
     private GameService gameService;
 
@@ -19,8 +20,7 @@ public class GameController {
 
     @GetMapping
     public ResponseEntity<GameInfoDto> newGame(){
-        gameService.newGame();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(gameService.newGame(),HttpStatus.OK);
     }
 
     @PostMapping
