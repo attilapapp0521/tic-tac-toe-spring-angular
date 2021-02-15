@@ -18,11 +18,20 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    /**
+     *
+     * @return Visszaadja az újonnan generált tic-tac-toe táblát
+     */
     @GetMapping
     public ResponseEntity<GameInfoDto> newGame(){
         return new ResponseEntity<>(gameService.newGame(),HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param request frontendtől kapott a lépés megtételéhez is szükséges információkat tartalmazza.
+     * @return Vissza adja a lépés utáni állapotot
+     */
     @PostMapping
     public ResponseEntity<GameInfoDto> nextStep(@RequestBody GameInfoDto request) {
         GameInfoDto gameInfoDto = gameService.nextStep(request);
@@ -34,6 +43,10 @@ public class GameController {
         return new ResponseEntity<>(gameInfoDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @return Visszaadja a staisztika törölésekor lenullálozodott értékeket
+     */
     @PutMapping
     public ResponseEntity<GameInfoDto> deleteAll(@RequestBody GameInfoDto gameInfoDto) {
 

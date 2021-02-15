@@ -23,7 +23,11 @@ public class GameService {
         this.gameInfoDto = new GameInfoDto();
     }
 
-
+    /**
+     *
+     * @return A metódus felelős azért hogy új, üres tic-tac-toe tábla jöjjön létre,
+     * ezt tárolódik a GameInfoDto-ban.
+     */
     public GameInfoDto newGame() {
         List<String> newBoard = new ArrayList<>();
 
@@ -37,6 +41,12 @@ public class GameService {
 
         return gameInfoDto;
     }
+
+    /**
+     *
+     * @param request A frontend-től kapott játékkal kapcsolatos információkat hordozza.
+     * @return A következő szimbólum (X vagy O) elhelyezésének logikáját tartalmazza.
+     */
 
     public GameInfoDto nextStep(GameInfoDto request) {
 
@@ -57,6 +67,13 @@ public class GameService {
         return gameInfoDto;
     }
 
+    /**
+     *
+     * @param coordinate tartalmazza a szimbolum elhelyezésének pozícióját.
+     * @param board maga a tábla ahol a szimbólumok tárolva vannak.
+     * @param isFirstPlayer boolean, azt vizgálja, hogy az első játékos lépett-e.
+     * @return Itt történik a szimbólum felhelyezése a táblára.
+     */
     private List<String> playerMove(int coordinate, List<String> board,
                                     boolean isFirstPlayer) {
 
@@ -68,6 +85,10 @@ public class GameService {
         return board;
     }
 
+    /**
+     *
+     * @return Itt történik annak a vizsgálata,hogy a pályán történt változás után van-e nyertes.
+     */
     private int checkWinCondition(List<String> board) {
         int result = 0;
         for (int i = 0; i < board.size(); i++) {
@@ -95,6 +116,13 @@ public class GameService {
         return result;
     }
 
+    /**
+     *
+     * @param index A tábla egy mezőjének helyét jelzi
+     * @param step Ez egy segéd változó, ami a logikához szükséges
+     * @return Segéd metódús ami vagy visszintesen vagy függőlegesen vagy átlósan vizsgálja,
+     * hogy van-e összesen 3 azonos szimbólumú elem.
+     */
     private int separatePlayer(int index, int step, List<String> board) {
 
         if (board.get(index).equals("X") && board.get(index + step).equals("X")
@@ -108,10 +136,22 @@ public class GameService {
         return 0;
     }
 
+    /**
+     *
+     * @return Ez a metódus felelős azért, hogy a másik játékos következzen
+     */
     private boolean nextPlayer(boolean isFirstPlayer) {
         return !isFirstPlayer;
     }
 
+    /**
+     *
+     * @param condition Azt mutatja meg, hogy valamelyik játékos megnyerte-e a játékot,
+     *                 illetve döntetlen lett-e.
+     * @param id Az adatbázisban tárolt statisztika id-ja
+     * @return Tárolja az adatbázisban a jelenlegi statisztikát, ennek az értékét tárolja
+     * a DTO-ban is, hogy megjeleníthető legyen.
+     */
     public GameInfoDto save(int condition, Long id) {
         Game game = getGameById(id);
 
@@ -121,36 +161,45 @@ public class GameService {
 
         if (condition == 1) {
             game.setWonP1();
-            gameRepository.save(game);
-            gameInfoDto.setGameId(game.getId());
-            gameInfoDto.setWonP1(game.getWonP1());
+            this.gameRepository.save(game);
+            this.gameInfoDto.setGameId(game.getId());
+            this.gameInfoDto.setWonP1(game.getWonP1());
         } else if (condition == 2) {
             game.setWonP2();
-            gameRepository.save(game);
-            gameInfoDto.setGameId(game.getId());
-            gameInfoDto.setWonP2(game.getWonP2());
+            this.gameRepository.save(game);
+            this.gameInfoDto.setGameId(game.getId());
+            this.gameInfoDto.setWonP2(game.getWonP2());
         } else if (condition == 3) {
             game.setDraw();
-            gameRepository.save(game);
-            gameInfoDto.setGameId(game.getId());
-            gameInfoDto.setDraw(game.getDraw());
+            this.gameRepository.save(game);
+            this.gameInfoDto.setGameId(game.getId());
+            this.gameInfoDto.setDraw(game.getDraw());
         }
 
         return  gameInfoDto;
     }
 
+    /**
+     *
+     * @return Abban az esetben van szükség erre a metódusra, ha töröltük a statisztikát és új játékot
+     * kezdünk akkor megfelelően megjelenítse a kinullázott értékeket
+     */
     private GameInfoDto reset(){
         List<Game> playersList = this.gameRepository.findAll();
 
         if(playersList.isEmpty()){
-            gameInfoDto.setWonP1(0);
-            gameInfoDto.setWonP2(0);
-            gameInfoDto.setDraw(0);
+            this.gameInfoDto.setWonP1(0);
+            this.gameInfoDto.setWonP2(0);
+            this.gameInfoDto.setDraw(0);
         }
 
         return gameInfoDto;
     }
 
+    /**
+     *
+     * @return Itt történik meg a törlés az adatbázisból
+     */
     public GameInfoDto deleteAll(GameInfoDto gameInfoDto) {
         this.gameRepository.deleteAll();
 
@@ -162,6 +211,12 @@ public class GameService {
     }
 
 
+    /**
+     *
+     * @return Vissza adja az id paraméterben megadott azonosítójú statiszikát.
+     * Alapvetően csak egy értéke lehet az adatbásinak, de ez azért szükséges, mert törlés után
+     * létrehozott id is változik.
+     */
     private Game getGameById(Long id){
         return gameRepository.getGameById(id);
     }
