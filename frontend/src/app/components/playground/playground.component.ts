@@ -78,7 +78,6 @@ export class PlaygroundComponent implements OnInit{
     this.gameService.updateByEmptyStatistics(this.gameForm).subscribe(
       response => {
         this.gameForm = response;
-        console.log(response);
       }
     )
   }
